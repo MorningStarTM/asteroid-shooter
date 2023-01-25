@@ -1,11 +1,12 @@
 import pygame
+import random
 import math
 
 pygame.init()
 
 #screen variable
 WIDTH = 1500
-HEIGHT = 750
+HEIGHT = 800
 
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 #title
@@ -17,16 +18,26 @@ pygame.display.set_icon(icon)
 
 bg = pygame.image.load('./image/bg.jpg')
 
-""" Player  """
+"""     Player  """
 #player image load
 player_img = pygame.image.load('./image/spaceship.png')
 #position of player
 player_x = 700
-player_y = 650
+player_y = 700
 playerX_change = 0
+
+#draw the player on screen
 def player(x, y):
     SCREEN.blit(player_img, (x, y))
 
+
+"""     Asteroid    """
+asteroidImg = pygame.image.load('./image/asteroid_1.png')
+asteroidX = random.randint(0,1436)
+asteroidY = random.randint(50, 150)
+
+def asteroid(x, y):
+    SCREEN.blit(asteroidImg, (asteroidX, asteroidY))
 
 run = True
 while run:
@@ -64,4 +75,5 @@ while run:
 
     SCREEN.blit(bg, (0,0))
     player(player_x, player_y)
+    asteroid(asteroidX, asteroidY)
     pygame.display.update()
