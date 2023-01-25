@@ -36,6 +36,7 @@ while run:
         if event.type == pygame.QUIT:
             run = False
         
+        #when key pressed
         if event.type == pygame.KEYDOWN:
             #press left arrow key
             if event.key == pygame.K_LEFT:
@@ -45,10 +46,22 @@ while run:
             if event.key == pygame.K_RIGHT:
                 #increase the value of position of player
                 playerX_change = 0.4
+        #when key released
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key ==  pygame.K_RIGHT:
                 playerX_change = 0
+
     player_x += playerX_change
+
+    #set up the player into the screen when moving outside of screen
+    if player_x <= 0:
+        player_x = 0
+    #player size 64x64, 1500-64=1436
+    if player_x >= 1436:
+        player_x = 1436
+
+
+
     SCREEN.blit(bg, (0,0))
     player(player_x, player_y)
     pygame.display.update()
