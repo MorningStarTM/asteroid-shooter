@@ -15,6 +15,8 @@ pygame.display.set_caption("Asteroid Shooter")
 icon = pygame.image.load('./image/asteroid.png')
 pygame.display.set_icon(icon)
 
+clock = pygame.time.Clock()
+
 #background image
 bg = pygame.image.load('./image/bg.jpg')
 
@@ -79,19 +81,41 @@ class Bullet(pygame.sprite.Sprite):
 
 
 
+
+#class for Asteroid
+class Asteroid(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("./image/asteroid_" + str(random.randint(1,3)) + ".png")
+        self.rect = self.image.get_rect()
+        self.rect.center = [x, y]
+
+    def update(self):
+        self.rect.y += 1
+        #clock.tick(60)
+        
+
+
+
 #sprite group
 Spaceship_group = pygame.sprite.Group()
 Bullet_group = pygame.sprite.Group()
+Asteroid_group = pygame.sprite.Group()
 
 #player
 spaceship = Spaceship(int(WIDTH/2), int(HEIGHT - 100), 5)
 Spaceship_group.add(spaceship)
 
+#Asteroid
+for i in range(5):
+    astroid = Asteroid(random.randint(32,768), 10)
+    Asteroid_group.add(astroid)
+
 
 run = True
 while run:
 
-    
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
@@ -106,11 +130,17 @@ while run:
     #draw the player
     Spaceship_group.draw(SCREEN)
 
+    #draw the asteroid
+    Asteroid_group.draw(SCREEN)
+
     #player movement
     spaceship.update()
 
     #bullet movement
     Bullet_group.update()
+
+    #asteroid movement
+    Asteroid_group.update()
  
     pygame.display.update()
 
