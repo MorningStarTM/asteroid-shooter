@@ -19,6 +19,22 @@ pygame.display.set_icon(icon)
 bg = pygame.image.load('./image/bg.jpg')
 
 
+#class for spaceship
+class Spaceship(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("./image/spaceship.png")
+        self.rect = self.image.get_rect()
+        self.rect.center = [x, y]
+
+
+#sprite group
+Spaceship_group = pygame.sprite.Group()
+
+#player
+spaceship = Spaceship(int(WIDTH/2), int(HEIGHT - 100))
+Spaceship_group.add(spaceship)
+
 run = True
 while run:
 
@@ -30,6 +46,7 @@ while run:
         
 
     SCREEN.blit(bg, (0,0))
+    Spaceship_group.draw(SCREEN)
  
     pygame.display.update()
 
