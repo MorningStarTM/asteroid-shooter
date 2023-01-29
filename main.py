@@ -32,10 +32,13 @@ class Spaceship(pygame.sprite.Sprite):
         self.rect.center = [x, y]
         self.health_at_begining = health
         self.health_remaining = health
+        self.last_shot = pygame.time.get_ticks()
 
     def update(self):
         #movement speed
         speed = 5
+        #cooldown time
+        cooldown = 100 #milliseconds
 
         #get pressed key
         key = pygame.key.get_pressed()
@@ -46,17 +49,44 @@ class Spaceship(pygame.sprite.Sprite):
         if key[pygame.K_RIGHT] and self.rect.right < WIDTH:
             self.rect.x += speed
 
+        #recored current time
+        time_now = pygame.time.get_ticks()
+        #when space bar pressed, shoot
+        if key[pygame.K_SPACE] and time_now - self.last_shot > cooldown:
+            bullet = Bullet(self.rect.centerx, self.rect.top)
+            Bullet_group.add(bullet)
+            self.last_shot = time_now
+
         #draw the health bar to player
         pygame.draw.rect(SCREEN, red, (self.rect.x, (self.rect.bottom + 10), self.rect.width, 15))
         if self.health_remaining > 0:
             pygame.draw.rect(SCREEN, green, (self.rect.x, (self.rect.bottom + 10), int(self.rect.width * (self.health_remaining / self.health_at_begining)), 15))
 
+
+
+#class for spaceship
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("./image/bullet.png")
+        self.rect = self.image.get_rect()
+        self.rect.center = [x, y]
+
+    def update(self):
+        self.rect.y -= 5
+        if self.rect.bottom < 200:
+            self.kill()
+
+
+
 #sprite group
 Spaceship_group = pygame.sprite.Group()
+Bullet_group = pygame.sprite.Group()
 
 #player
 spaceship = Spaceship(int(WIDTH/2), int(HEIGHT - 100), 5)
 Spaceship_group.add(spaceship)
+
 
 run = True
 while run:
@@ -70,11 +100,17 @@ while run:
     #screen background
     SCREEN.blit(bg, (0,0))
     
-    #player movement
-    spaceship.update()
+    #bullet movement
+    Bullet_group.draw(SCREEN)
 
     #draw the player
     Spaceship_group.draw(SCREEN)
+
+    #player movement
+    spaceship.update()
+
+    #bullet movement
+    Bullet_group.update()
  
     pygame.display.update()
 
