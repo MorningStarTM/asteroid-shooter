@@ -18,14 +18,20 @@ pygame.display.set_icon(icon)
 #background image
 bg = pygame.image.load('./image/bg.jpg')
 
+#green color
+green = (0,255,0)
+red = (255,0,0)
+
 
 #class for spaceship
 class Spaceship(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, health):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("./image/spaceship.png")
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
+        self.health_at_begining = health
+        self.health_remaining = health
 
     def update(self):
         #movement speed
@@ -34,17 +40,22 @@ class Spaceship(pygame.sprite.Sprite):
         #get pressed key
         key = pygame.key.get_pressed()
         #when left arrow pressed
-        if key[pygame.K_LEFT]:
+        if key[pygame.K_LEFT] and self.rect.left > 0:
             self.rect.x -= speed
-        #when right key pressed
-        if key[pygame.K_RIGHT]:
+        #when right key pressed 
+        if key[pygame.K_RIGHT] and self.rect.right < WIDTH:
             self.rect.x += speed
+
+        #draw the health bar to player
+        pygame.draw.rect(SCREEN, red, (self.rect.x, (self.rect.bottom + 10), self.rect.width, 15))
+        if self.health_remaining > 0:
+            pygame.draw.rect(SCREEN, green, (self.rect.x, (self.rect.bottom + 10), int(self.rect.width * (self.health_remaining / self.health_at_begining)), 15))
 
 #sprite group
 Spaceship_group = pygame.sprite.Group()
 
 #player
-spaceship = Spaceship(int(WIDTH/2), int(HEIGHT - 100))
+spaceship = Spaceship(int(WIDTH/2), int(HEIGHT - 100), 5)
 Spaceship_group.add(spaceship)
 
 run = True
@@ -56,9 +67,13 @@ while run:
             run = False
         
         
-
+    #screen background
     SCREEN.blit(bg, (0,0))
+    
+    #player movement
     spaceship.update()
+
+    #draw the player
     Spaceship_group.draw(SCREEN)
  
     pygame.display.update()
