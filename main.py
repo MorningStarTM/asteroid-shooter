@@ -82,17 +82,35 @@ class Bullet(pygame.sprite.Sprite):
 
 
 
-#class for Asteroid
+# Class for the asteroids
 class Asteroid(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("./image/asteroid_" + str(random.randint(1,3)) + ".png")
+        self.image = asteroid_img
         self.rect = self.image.get_rect()
-        self.rect.center = [x, y]
+        self.rect.x = random.randrange(0, screen_width  - self.rect.width)
+        self.rect.y = random.randrange(-150, -100)
+        self.speed_y = random.randrange(2,8)
+        self.speed_x = random.randrange(-5,5)
+    
+    def spawn_new_asteroid(self):
+        self.rect.x = random.randrange(0, screen_width  - self.rect.width)
+        self.rect.y = random.randrange(-150, -100)
+        self.speed_y = random.randrange(2,8)
+        self.speed_x = random.randrange(-5,5)
+
+    def boundary(self):
+        if self.rect.left > screen_width + 16 or self.rect.right < -16 or self.rect.top > screen_height + 16:
+            self.spawn_new_asteroid()
 
     def update(self):
-        self.rect.y += 1
-        #clock.tick(60)
+        self.rect.y += self.speed_y 
+        self.rect.x +=  self.speed_x
+        self.boundary()
+        #clock.tick(fps)
+    
+    
+
         
 
 
@@ -102,14 +120,17 @@ Spaceship_group = pygame.sprite.Group()
 Bullet_group = pygame.sprite.Group()
 Asteroid_group = pygame.sprite.Group()
 
+
 #player
 spaceship = Spaceship(int(WIDTH/2), int(HEIGHT - 100), 5)
 Spaceship_group.add(spaceship)
 
+time_now = pygame.time.get_ticks()
+time_released = 0
 #Asteroid
-for i in range(5):
-    astroid = Asteroid(random.randint(32,768), 10)
-    Asteroid_group.add(astroid)
+astroid = Asteroid(random.randint(32,700) + 68, random.randint(-10,10))
+Asteroid_group.add(astroid)
+        
 
 
 run = True
