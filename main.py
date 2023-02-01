@@ -19,6 +19,7 @@ clock = pygame.time.Clock()
 
 #background image
 bg = pygame.image.load('./image/bg.jpg')
+asteroid_img =pygame.image.load('./image/asteroid_1.png')
 
 #green color
 green = (0,255,0)
@@ -88,19 +89,19 @@ class Asteroid(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = asteroid_img
         self.rect = self.image.get_rect()
-        self.rect.x = random.randrange(0, screen_width  - self.rect.width)
+        self.rect.x = random.randrange(0, WIDTH  - self.rect.width)
         self.rect.y = random.randrange(-150, -100)
         self.speed_y = random.randrange(2,8)
         self.speed_x = random.randrange(-5,5)
     
     def spawn_new_asteroid(self):
-        self.rect.x = random.randrange(0, screen_width  - self.rect.width)
+        self.rect.x = random.randrange(0, WIDTH  - self.rect.width)
         self.rect.y = random.randrange(-150, -100)
         self.speed_y = random.randrange(2,8)
         self.speed_x = random.randrange(-5,5)
 
     def boundary(self):
-        if self.rect.left > screen_width + 16 or self.rect.right < -16 or self.rect.top > screen_height + 16:
+        if self.rect.left > WIDTH + 16 or self.rect.right < -16 or self.rect.top > WIDTH + 16:
             self.spawn_new_asteroid()
 
     def update(self):
@@ -118,7 +119,14 @@ class Asteroid(pygame.sprite.Sprite):
 #sprite group
 Spaceship_group = pygame.sprite.Group()
 Bullet_group = pygame.sprite.Group()
-Asteroid_group = pygame.sprite.Group()
+
+all_sprite = pygame.sprite.Group()
+asteroid_group = pygame.sprite.Group()
+for i in range(5):
+    asteroid = Asteroid()
+    asteroid_group.add(asteroid)
+    all_sprite.add(asteroid)    
+
 
 
 #player
@@ -127,16 +135,13 @@ Spaceship_group.add(spaceship)
 
 time_now = pygame.time.get_ticks()
 time_released = 0
-#Asteroid
-astroid = Asteroid(random.randint(32,700) + 68, random.randint(-10,10))
-Asteroid_group.add(astroid)
         
 
 
 run = True
 while run:
 
-
+    clock.tick(60)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
@@ -152,7 +157,7 @@ while run:
     Spaceship_group.draw(SCREEN)
 
     #draw the asteroid
-    Asteroid_group.draw(SCREEN)
+    asteroid_group.draw(SCREEN)
 
     #player movement
     spaceship.update()
@@ -161,7 +166,7 @@ while run:
     Bullet_group.update()
 
     #asteroid movement
-    Asteroid_group.update()
+    asteroid_group.update()
  
     pygame.display.update()
 
