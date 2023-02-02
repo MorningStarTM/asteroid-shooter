@@ -19,7 +19,7 @@ clock = pygame.time.Clock()
 
 #background image
 bg = pygame.image.load('./image/bg.jpg')
-asteroid_img =pygame.image.load('./image/asteroid_1.png')
+
 
 #green color
 green = (0,255,0)
@@ -65,6 +65,12 @@ class Spaceship(pygame.sprite.Sprite):
             missile = Missile(self.rect.centerx, self.rect.top)
             Missile_group.add(missile)
             self.last_shot = time_now
+        
+        if key[pygame.K_q] and time_now - self.last_shot > cooldown:
+            nuclear = Nuclear(self.rect.centerx, self.rect.top)
+            Nuclear_group.add(nuclear)
+            self.last_shot = time_now
+
 
 
         #draw the health bar to player
@@ -101,11 +107,26 @@ class Missile(pygame.sprite.Sprite):
         if self.rect.bottom < 200:
             self.kill()
 
+
+#class for nuclear
+class Nuclear(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("./image/nuclear.png")
+        self.rect = self.image.get_rect()
+        self.rect.center = [x, y]
+
+    def update(self):
+        self.rect.y -= 5
+        if self.rect.bottom < 200:
+            self.kill()
+
+
 # Class for the asteroids
 class Asteroid(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = asteroid_img
+        self.image = pygame.image.load('./image/asteroid_' + str(random.randrange(1,3)) + '.png')
         self.rect = self.image.get_rect()
         self.rect.x = random.randrange(0, WIDTH  - self.rect.width)
         self.rect.y = random.randrange(-150, -100)
@@ -144,6 +165,7 @@ def generate_asteroid():
 Spaceship_group = pygame.sprite.Group()
 Bullet_group = pygame.sprite.Group()
 Missile_group = pygame.sprite.Group()
+Nuclear_group = pygame.sprite.Group()
 
 all_sprite = pygame.sprite.Group()
 asteroid_group = pygame.sprite.Group()
@@ -177,6 +199,9 @@ while run:
     #missile movement
     Missile_group.draw(SCREEN)
 
+    #nuclear missile movement
+    Nuclear_group.draw(SCREEN)
+
     #draw the player
     Spaceship_group.draw(SCREEN)
 
@@ -191,6 +216,9 @@ while run:
 
     #missile movement
     Missile_group.update()
+
+    #nuclear missile movement
+    Nuclear_group.update()
 
     #asteroid movement
     asteroid_group.update()
