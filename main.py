@@ -112,7 +112,13 @@ class Asteroid(pygame.sprite.Sprite):
     
     
 
-        
+#game functions
+def generate_asteroid():
+    asteroid = Asteroid()
+    asteroid_group.add(asteroid)
+    all_sprite.add(asteroid)    
+
+       
 
 
 
@@ -122,11 +128,6 @@ Bullet_group = pygame.sprite.Group()
 
 all_sprite = pygame.sprite.Group()
 asteroid_group = pygame.sprite.Group()
-for i in range(5):
-    asteroid = Asteroid()
-    asteroid_group.add(asteroid)
-    all_sprite.add(asteroid)    
-
 
 
 #player
@@ -135,8 +136,9 @@ Spaceship_group.add(spaceship)
 
 time_now = pygame.time.get_ticks()
 time_released = 0
-        
 
+for i in range(9):        
+    generate_asteroid()
 
 run = True
 while run:
@@ -172,7 +174,10 @@ while run:
     asteroid_collision = pygame.sprite.spritecollide(spaceship, asteroid_group, False)
     if asteroid_collision:
         run = False
- 
+    
+    bullet_collision = pygame.sprite.groupcollide(Bullet_group, asteroid_group, True, True)
+    if bullet_collision:
+        generate_asteroid()
     pygame.display.update()
 
 pygame.display.quit()
