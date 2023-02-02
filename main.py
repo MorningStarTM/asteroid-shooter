@@ -39,7 +39,7 @@ class Spaceship(pygame.sprite.Sprite):
 
     def update(self):
         #movement speed
-        speed = 5
+        speed = 8
         #cooldown time
         cooldown = 100 #milliseconds
 
@@ -59,6 +59,13 @@ class Spaceship(pygame.sprite.Sprite):
             bullet = Bullet(self.rect.centerx, self.rect.top)
             Bullet_group.add(bullet)
             self.last_shot = time_now
+        
+        #when ctrl pressed missile will be released
+        if key[pygame.K_LCTRL] and time_now - self.last_shot > cooldown:
+            missile = Missile(self.rect.centerx, self.rect.top)
+            Missile_group.add(missile)
+            self.last_shot = time_now
+
 
         #draw the health bar to player
         pygame.draw.rect(SCREEN, red, (self.rect.x, (self.rect.bottom + 10), self.rect.width, 15))
@@ -81,7 +88,18 @@ class Bullet(pygame.sprite.Sprite):
             self.kill()
 
 
+#class for missile
+class Missile(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("./image/missile.png")
+        self.rect = self.image.get_rect()
+        self.rect.center = [x, y]
 
+    def update(self):
+        self.rect.y -= 5
+        if self.rect.bottom < 200:
+            self.kill()
 
 # Class for the asteroids
 class Asteroid(pygame.sprite.Sprite):
@@ -125,6 +143,7 @@ def generate_asteroid():
 #sprite group
 Spaceship_group = pygame.sprite.Group()
 Bullet_group = pygame.sprite.Group()
+Missile_group = pygame.sprite.Group()
 
 all_sprite = pygame.sprite.Group()
 asteroid_group = pygame.sprite.Group()
@@ -155,6 +174,9 @@ while run:
     #bullet movement
     Bullet_group.draw(SCREEN)
 
+    #missile movement
+    Missile_group.draw(SCREEN)
+
     #draw the player
     Spaceship_group.draw(SCREEN)
 
@@ -166,6 +188,9 @@ while run:
 
     #bullet movement
     Bullet_group.update()
+
+    #missile movement
+    Missile_group.update()
 
     #asteroid movement
     asteroid_group.update()
