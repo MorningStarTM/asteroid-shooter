@@ -167,6 +167,11 @@ while run:
 
     #asteroid movement
     asteroid_group.update()
+
+    #collision detect
+    asteroid_collision = pygame.sprite.spritecollide(spaceship, asteroid_group, False)
+    if asteroid_collision:
+        run = False
  
     pygame.display.update()
 
