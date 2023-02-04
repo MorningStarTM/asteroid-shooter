@@ -188,6 +188,32 @@ class BigAsteroid(pygame.sprite.Sprite):
         #clock.tick(fps)
 
 
+#class for explosion
+class Explosion(pygame.sprite.Sprite):
+    def __init__(self, x, y, size):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = []
+        for eps in range(1,6):
+            #load explosion image
+            img = pygame.image.load(f'./image/exp{eps}.png')
+            #explosion size
+            if size == 1:
+                img = pygame.transform.scale(img, (20, 20))
+            elif size == 2:
+                img = pygame.transform.scale(img, (40, 40))
+            elif size == 3:
+                img = pygame.transform.scale(img, (160, 160))
+            #append the img into list
+            self.image.append(img)
+        self.index = 0
+        self.image = self.image[self.index]
+        self.rect = self.image.get_rect()
+        self.rect.center = [x,y]
+        self.counter = 0
+        
+        
+
+
 
 #game functions
 def generate_asteroid():
