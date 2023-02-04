@@ -148,8 +148,34 @@ class Asteroid(pygame.sprite.Sprite):
         self.rect.x +=  self.speed_x
         self.boundary()
         #clock.tick(fps)
+
+
+#class for big asteroid
+class BigAsteroid(pygame.sprite.Sprite):
+    def __init__(self, health):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('./image/asteroid_4.png')
+        self.rect = self.image.get_rect()
+        self.rect.x = random.randrange(0, WIDTH  - self.rect.width)
+        self.rect.y = random.randrange(-150, -100)
+        self.speed_y = random.randrange(1,3)
+        #self.speed_x = random.randrange(-5,5)
+        self.health_at_begining = health
+        self.health_remaining = health
     
-    
+    def update(self):
+        self.rect.y += self.speed_y 
+        #self.rect.x +=  self.speed_x
+
+        #draw the health bar to player
+        pygame.draw.rect(SCREEN, red, (self.rect.x, (self.rect.top - 15), self.rect.width, 15))
+        if self.health_remaining > 0:
+            pygame.draw.rect(SCREEN, green, (self.rect.x, (self.rect.top - 15), int(self.rect.width * (self.health_remaining / self.health_at_begining)), 15))
+
+        
+        #clock.tick(fps)
+
+
 
 #game functions
 def generate_asteroid():
@@ -169,7 +195,9 @@ Nuclear_group = pygame.sprite.Group()
 
 all_sprite = pygame.sprite.Group()
 asteroid_group = pygame.sprite.Group()
-
+BigAsteroid_group = pygame.sprite.Group()
+big = BigAsteroid(10)
+BigAsteroid_group.add(big)
 
 #player
 spaceship = Spaceship(int(WIDTH/2), int(HEIGHT - 100), 5)
@@ -181,10 +209,15 @@ time_released = 0
 for i in range(9):        
     generate_asteroid()
 
+#get time in game loob
+current_time = 0
+#if current_time >= 500:
+
 run = True
 while run:
 
     clock.tick(60)
+    current_time = pygame.time.get_ticks()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
@@ -193,13 +226,13 @@ while run:
     #screen background
     SCREEN.blit(bg, (0,0))
     
-    #bullet movement
+    #draw bullet
     Bullet_group.draw(SCREEN)
 
-    #missile movement
+    #draw missile
     Missile_group.draw(SCREEN)
 
-    #nuclear missile movement
+    #draw nuclear missile 
     Nuclear_group.draw(SCREEN)
 
     #draw the player
@@ -207,6 +240,9 @@ while run:
 
     #draw the asteroid
     asteroid_group.draw(SCREEN)
+
+    #draw the big asteroid
+    BigAsteroid_group.draw(SCREEN)
 
     #player movement
     spaceship.update()
@@ -222,6 +258,9 @@ while run:
 
     #asteroid movement
     asteroid_group.update()
+
+    #big asteroid movement
+    BigAsteroid_group.update()
 
     #collision detect
     asteroid_collision = pygame.sprite.spritecollide(spaceship, asteroid_group, False)
