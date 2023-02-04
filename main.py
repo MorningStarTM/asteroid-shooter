@@ -43,6 +43,9 @@ class Spaceship(pygame.sprite.Sprite):
         #cooldown time
         cooldown = 100 #milliseconds
 
+        #mask
+        self.mask = pygame.mask.from_surface(self.image)
+
         #get pressed key
         key = pygame.key.get_pressed()
         #when left arrow pressed
@@ -172,6 +175,15 @@ class BigAsteroid(pygame.sprite.Sprite):
         if self.health_remaining > 0:
             pygame.draw.rect(SCREEN, green, (self.rect.x, (self.rect.top - 15), int(self.rect.width * (self.health_remaining / self.health_at_begining)), 15))
 
+        if pygame.sprite.spritecollide(self, Bullet_group, True):
+            self.health_remaining -= 0.5
+        elif pygame.sprite.spritecollide(self, Missile_group, True):
+            self.health_remaining -= 1
+        elif pygame.sprite.spritecollide(self, Nuclear_group, True):
+            self.health_remaining -= 10
+        
+        if self.health_remaining <= 0:
+            self.kill()
         
         #clock.tick(fps)
 
@@ -263,11 +275,11 @@ while run:
     BigAsteroid_group.update()
 
     #collision detect
-    asteroid_collision = pygame.sprite.spritecollide(spaceship, asteroid_group, False)
+    asteroid_collision = pygame.sprite.spritecollide(spaceship, asteroid_group, False, pygame.sprite.collide_mask)
     if asteroid_collision:
         run = False
     
-    bullet_collision = pygame.sprite.groupcollide(Bullet_group, asteroid_group, True, True)
+    bullet_collision = pygame.sprite.groupcollide(Bullet_group, asteroid_group, True, True, pygame.sprite.collide_mask)
     if bullet_collision:
         generate_asteroid()
     pygame.display.update()
