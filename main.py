@@ -93,8 +93,11 @@ class Bullet(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.y -= 5
-        if self.rect.bottom < 200:
+        if pygame.sprite.spritecollide(self, asteroid_group, True):
             self.kill()
+            generate_asteroid()
+            explosion = Explosion(self.rect.centerx, self.rect.centery, 2)
+            Explosion_group.add(explosion)
 
 
 #class for missile
@@ -192,7 +195,7 @@ class BigAsteroid(pygame.sprite.Sprite):
 class Explosion(pygame.sprite.Sprite):
     def __init__(self, x, y, size):
         pygame.sprite.Sprite.__init__(self)
-        self.image = []
+        self.images = []
         for eps in range(1,6):
             #load explosion image
             img = pygame.image.load(f'./image/exp{eps}.png')
@@ -204,12 +207,25 @@ class Explosion(pygame.sprite.Sprite):
             elif size == 3:
                 img = pygame.transform.scale(img, (160, 160))
             #append the img into list
-            self.image.append(img)
+            self.images.append(img)
         self.index = 0
-        self.image = self.image[self.index]
+        self.image = self.images[self.index]
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
         self.counter = 0
+
+    
+    def update(self):
+        explosion_speed = 3
+        self.counter += 1
+
+        if self.counter >= explosion_speed and self.index < len(self.images) - 1:
+            self.counter = 0
+            self.index += 1
+            self.image = self.images[self.index]
+
+        if self.index >= len(self.images) - 1 and self.counter >= explosion_speed:
+            self.kill()
         
         
 
@@ -230,6 +246,7 @@ Spaceship_group = pygame.sprite.Group()
 Bullet_group = pygame.sprite.Group()
 Missile_group = pygame.sprite.Group()
 Nuclear_group = pygame.sprite.Group()
+Explosion_group = pygame.sprite.Group()
 
 all_sprite = pygame.sprite.Group()
 asteroid_group = pygame.sprite.Group()
@@ -282,6 +299,9 @@ while run:
     #draw the big asteroid
     BigAsteroid_group.draw(SCREEN)
 
+    #draw the explosion
+    Explosion_group.draw(SCREEN)
+
     #player movement
     spaceship.update()
 
@@ -300,14 +320,18 @@ while run:
     #big asteroid movement
     BigAsteroid_group.update()
 
+    #explosion movement
+    Explosion_group.update()
+
     #collision detect
     asteroid_collision = pygame.sprite.spritecollide(spaceship, asteroid_group, False, pygame.sprite.collide_mask)
     if asteroid_collision:
         run = False
     
-    bullet_collision = pygame.sprite.groupcollide(Bullet_group, asteroid_group, True, True, pygame.sprite.collide_mask)
+    """bullet_collision = pygame.sprite.groupcollide(Bullet_group, asteroid_group, True, True, pygame.sprite.collide_mask)
     if bullet_collision:
-        generate_asteroid()
+        explosion = Explosion(asteroid_group.)
+        generate_asteroid()"""
     pygame.display.update()
 
 pygame.display.quit()
