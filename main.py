@@ -1,6 +1,7 @@
 import pygame
 import random
 import math
+import time
 
 pygame.init()
 
@@ -170,6 +171,7 @@ class BigAsteroid(pygame.sprite.Sprite):
         #self.speed_x = random.randrange(-5,5)
         self.health_at_begining = health
         self.health_remaining = health
+        self.time_astroid = 0
     
     def update(self):
         self.rect.y += self.speed_y 
@@ -191,6 +193,14 @@ class BigAsteroid(pygame.sprite.Sprite):
             self.kill()
             explosion = Explosion(self.rect.centerx, self.rect.centery, None)
             Explosion_group.add(explosion)
+            bastroid = BigAsteroid(10)
+            BigAsteroid_group.add(bastroid)
+        
+        """elif self.rect.centery > 1200:
+            if self.time_astroid % 10 == 0:
+                bastroid = BigAsteroid(100)
+                BigAsteroid_group.add(bastroid)"""
+        
         
         #clock.tick(fps)
 
@@ -257,27 +267,28 @@ Explosion_group = pygame.sprite.Group()
 all_sprite = pygame.sprite.Group()
 asteroid_group = pygame.sprite.Group()
 BigAsteroid_group = pygame.sprite.Group()
-big = BigAsteroid(10)
-BigAsteroid_group.add(big)
+
 
 #player
 spaceship = Spaceship(int(WIDTH/2), int(HEIGHT - 100), 5)
 Spaceship_group.add(spaceship)
 
-time_now = pygame.time.get_ticks()
-time_released = 0
+#get the starting time of asteroid
+start_time_big_asteroid = time.time()
+
+
+bigasteroid = BigAsteroid(10)
+BigAsteroid_group.add(bigasteroid)
 
 for i in range(9):        
     generate_asteroid()
 
-#get time in game loob
-current_time = 0
-#if current_time >= 500:
 
 run = True
 while run:
-
+    
     clock.tick(60)
+    elapsed = time.time()
     current_time = pygame.time.get_ticks()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -303,8 +314,8 @@ while run:
     asteroid_group.draw(SCREEN)
 
     #draw the big asteroid
-    BigAsteroid_group.draw(SCREEN)
-
+    BigAsteroid_group.draw(SCREEN)      
+        
     #draw the explosion
     Explosion_group.draw(SCREEN)
 
@@ -324,7 +335,7 @@ while run:
     asteroid_group.update()
 
     #big asteroid movement
-    BigAsteroid_group.update()
+    BigAsteroid_group.update()  
 
     #explosion movement
     Explosion_group.update()
