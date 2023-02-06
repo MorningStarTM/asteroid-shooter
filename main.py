@@ -99,6 +99,8 @@ class Bullet(pygame.sprite.Sprite):
             explosion = Explosion(self.rect.centerx, self.rect.centery, 2)
             Explosion_group.add(explosion)
 
+        
+
 
 #class for missile
 class Missile(pygame.sprite.Sprite):
@@ -187,6 +189,8 @@ class BigAsteroid(pygame.sprite.Sprite):
         
         if self.health_remaining <= 0:
             self.kill()
+            explosion = Explosion(self.rect.centerx, self.rect.centery, None)
+            Explosion_group.add(explosion)
         
         #clock.tick(fps)
 
@@ -206,6 +210,8 @@ class Explosion(pygame.sprite.Sprite):
                 img = pygame.transform.scale(img, (40, 40))
             elif size == 3:
                 img = pygame.transform.scale(img, (160, 160))
+            elif size == None:
+                img = pygame.transform.scale(img, (400, 400))
             #append the img into list
             self.images.append(img)
         self.index = 0
