@@ -33,7 +33,7 @@ red = (255,0,0)
 
 #class for spaceship
 class Spaceship(pygame.sprite.Sprite):
-    def __init__(self, x, y, health):
+    def __init__(self, x, y, health, Mammo=0, Nammo=0):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("./image/spaceship.png")
         self.rect = self.image.get_rect()
@@ -41,6 +41,8 @@ class Spaceship(pygame.sprite.Sprite):
         self.health_at_begining = health
         self.health_remaining = health
         self.last_shot = pygame.time.get_ticks()
+        self.Mammo = Mammo
+        self.Nammo = Nammo
 
     def update(self):
         #movement speed
@@ -90,13 +92,6 @@ class Spaceship(pygame.sprite.Sprite):
         
 
 
-
-
-
-
-  
-
-
 #sprite group
 Spaceship_group = pygame.sprite.Group()
 Bullet_group = Bullet.sprite_groups()
@@ -120,13 +115,8 @@ start_time_big_asteroid = time.time()
 bigasteroid = BigAsteroid(10, Explosion_group, SCREEN, BigAsteroid_group, Bullet_group, Missile_group, Nuclear_group)
 BigAsteroid_group.add(bigasteroid)
 
-#generate_asteroid(all_sprite)
 
-"""def generate_asteroid():
-    asteroid = Asteroid()
-    asteroid_group.add(asteroid)
-    all_sprite.add(asteroid) """ 
-
+#generate asteroid
 for i in range(9):
     GameFunction.generate_asteroid(asteroid_group,all_sprite)
 
