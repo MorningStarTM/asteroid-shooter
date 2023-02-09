@@ -2,7 +2,8 @@ import pygame
 import random
 import math
 import time
-from fire import Nuclear
+from fire import Nuclear, Missile, Bullet
+from animation import Explosion
 
 pygame.init()
 
@@ -84,40 +85,7 @@ class Spaceship(pygame.sprite.Sprite):
             pygame.draw.rect(SCREEN, green, (self.rect.x, (self.rect.bottom + 10), int(self.rect.width * (self.health_remaining / self.health_at_begining)), 15))
 
 
-
-#class for spaceship
-class Bullet(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("./image/bullet.png")
-        self.rect = self.image.get_rect()
-        self.rect.center = [x, y]
-
-    def update(self):
-        self.rect.y -= 5
-        if pygame.sprite.spritecollide(self, asteroid_group, True):
-            self.kill()
-            generate_asteroid()
-            explosion = Explosion(self.rect.centerx, self.rect.centery, 2)
-            Explosion_group.add(explosion)
-
         
-
-
-#class for missile
-class Missile(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("./image/missile.png")
-        self.rect = self.image.get_rect()
-        self.rect.center = [x, y]
-
-    def update(self):
-        self.rect.y -= 5
-        if self.rect.bottom < 0:
-            self.kill()       
-
-
 # Class for the asteroids
 class Asteroid(pygame.sprite.Sprite):
     def __init__(self):
@@ -190,48 +158,7 @@ class BigAsteroid(pygame.sprite.Sprite):
         def bAstro_health(self):
             return self.health_remaining
         
-        #clock.tick(fps)
-
-
-#class for explosion
-class Explosion(pygame.sprite.Sprite):
-    def __init__(self, x, y, size):
-        pygame.sprite.Sprite.__init__(self)
-        self.images = []
-        for eps in range(1,6):
-            #load explosion image
-            img = pygame.image.load(f'./image/exp{eps}.png')
-            #explosion size
-            if size == 1:
-                img = pygame.transform.scale(img, (20, 20))
-            elif size == 2:
-                img = pygame.transform.scale(img, (40, 40))
-            elif size == 3:
-                img = pygame.transform.scale(img, (160, 160))
-            elif size == None:
-                img = pygame.transform.scale(img, (400, 400))
-            #append the img into list
-            self.images.append(img)
-        self.index = 0
-        self.image = self.images[self.index]
-        self.rect = self.image.get_rect()
-        self.rect.center = [x,y]
-        self.counter = 0
-
-    
-    def update(self):
-        explosion_speed = 3
-        self.counter += 1
-
-        if self.counter >= explosion_speed and self.index < len(self.images) - 1:
-            self.counter = 0
-            self.index += 1
-            self.image = self.images[self.index]
-
-        if self.index >= len(self.images) - 1 and self.counter >= explosion_speed:
-            self.kill()
-        
-        
+        #clock.tick(fps)      
 
 
 
