@@ -2,6 +2,7 @@ import pygame
 import random
 import math
 import time
+from fire import Nuclear
 
 pygame.init()
 
@@ -113,24 +114,8 @@ class Missile(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.y -= 5
-        if self.rect.bottom < 200:
-            self.kill()
-
-
-#class for nuclear
-class Nuclear(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("./image/nuclear.png")
-        self.rect = self.image.get_rect()
-        self.rect.center = [x, y]
-
-    def update(self):
-        self.rect.y -= 5
         if self.rect.bottom < 0:
-            self.kill()
-        elif pygame.sprite.spritecollide(self, BigAsteroid_group, True):
-            self.kill()
+            self.kill()       
 
 
 # Class for the asteroids
@@ -187,7 +172,7 @@ class BigAsteroid(pygame.sprite.Sprite):
         if pygame.sprite.spritecollide(self, Bullet_group, True):
             self.health_remaining -= 0.5
         elif pygame.sprite.spritecollide(self, Missile_group, True):
-            self.health_remaining -= 1
+            self.health_remaining -= 0.5
         elif pygame.sprite.spritecollide(self, Nuclear_group, True):
             self.health_remaining -= 10
         
@@ -202,7 +187,8 @@ class BigAsteroid(pygame.sprite.Sprite):
             if self.time_astroid % 10 == 0:
                 bastroid = BigAsteroid(100)
                 BigAsteroid_group.add(bastroid)"""
-        
+        def bAstro_health(self):
+            return self.health_remaining
         
         #clock.tick(fps)
 
