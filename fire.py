@@ -3,6 +3,8 @@ import pygame
 import random
 import time
 from animation import Explosion
+from game_function import generate_asteroid
+from main import asteroid_group, Explosion_group
 
 class Nuclear(pygame.sprite.Sprite):
     def __init__(self, x, y):
