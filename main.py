@@ -31,7 +31,7 @@ green = (0,255,0)
 red = (255,0,0)
 
 #score
-score = 0
+score = display_score()
 
 #class for spaceship
 class Spaceship(pygame.sprite.Sprite):
@@ -113,10 +113,7 @@ Spaceship_group.add(spaceship)
 #get the starting time of asteroid
 start_time_big_asteroid = time.time()
 
-
-bigasteroid = BigAsteroid(10, Explosion_group, SCREEN, BigAsteroid_group, Bullet_group, Missile_group, Nuclear_group)
-BigAsteroid_group.add(bigasteroid)
-
+last_destroyed_time = time.time()
 
 #generate asteroid
 for i in range(9):
@@ -125,9 +122,13 @@ for i in range(9):
 run = True
 while run:
     
+
+
     clock.tick(60)
-    elapsed = time.time()
-    current_time = pygame.time.get_ticks()
+    
+    current_time = time.time()
+    time_since_last_destroyed = current_time - last_destroyed_time
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
@@ -188,8 +189,13 @@ while run:
         explosion = Explosion(asteroid_group.)
         generate_asteroid()"""
     
+    if time_since_last_destroyed >= 10.00:
+        # Display the new asteroid on the screen
+        print(time_since_last_destroyed)
+        GameFunction.generate_bigAsteroid(BigAsteroid_group, all_sprite, Explosion_group, SCREEN, Bullet_group, Missile_group, Nuclear_group)
 
-    display_score()
+        # Update the last_destroyed_time with the current time
+        last_destroyed_time = current_time
     
     pygame.display.update()
 

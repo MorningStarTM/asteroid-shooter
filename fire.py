@@ -10,7 +10,7 @@ from asteroid import Asteroid
 score = 0
 
 def display_score():
-    print(score)
+    return score
 
 class Nuclear(pygame.sprite.Sprite):
     def __init__(self, x, y):
