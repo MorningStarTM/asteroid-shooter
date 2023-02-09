@@ -16,6 +16,10 @@ class Nuclear(pygame.sprite.Sprite):
         if self.rect.bottom < 0:
             self.kill()
 
+    def sprite_groups():
+        Nuclear_group = pygame.sprite.Group()
+        return Nuclear_group
+
 
 
 
@@ -30,6 +34,10 @@ class Missile(pygame.sprite.Sprite):
     def update(self):
         self.rect.y -= 5
         if self.rect.bottom < 0:
-            self.kill()   
+            self.kill()  
+
+    def sprite_groups():
+        Missile_group = pygame.sprite.Group()
+        return Missile_group 
 
 

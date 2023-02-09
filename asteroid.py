@@ -5,7 +5,6 @@ import random
 WIDTH = 1820
 HEIGHT = 1000
 
-
 # Class for the asteroids
 class Asteroid(pygame.sprite.Sprite):
     def __init__(self):
@@ -32,3 +31,7 @@ class Asteroid(pygame.sprite.Sprite):
         self.rect.x +=  self.speed_x
         self.boundary()
         #clock.tick(fps)
+
+    def sprite_groups():
+        Asteroid_group = pygame.sprite.Group()
+        return Asteroid_group
