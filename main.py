@@ -2,9 +2,10 @@ import pygame
 import random
 import math
 import time
-from fire import Nuclear, Missile
+from fire import Nuclear, Missile, Bullet
 from asteroid import Asteroid
 from animation import Explosion
+from game_funtion import GameFunction
 
 pygame.init()
 
@@ -63,7 +64,7 @@ class Spaceship(pygame.sprite.Sprite):
         time_now = pygame.time.get_ticks()
         #when space bar pressed, shoot
         if key[pygame.K_SPACE] and time_now - self.last_shot > cooldown:
-            bullet = Bullet(self.rect.centerx, self.rect.top)
+            bullet = Bullet(self.rect.centerx, self.rect.top, all_sprite, asteroid_group, Explosion_group)
             Bullet_group.add(bullet)
             self.last_shot = time_now
         
@@ -138,28 +139,14 @@ class BigAsteroid(pygame.sprite.Sprite):
         #clock.tick(fps)      
 
 
-#class for Bullet
-class Bullet(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("./image/bullet.png")
-        self.rect = self.image.get_rect()
-        self.rect.center = [x, y]
 
-    def update(self):
-        self.rect.y -= 5
-        if pygame.sprite.spritecollide(self, asteroid_group, True):
-            self.kill()
-            generate_asteroid()
-            explosion = Explosion(self.rect.centerx, self.rect.centery, 2)
-            Explosion_group.add(explosion)
 
   
 
 
 #sprite group
 Spaceship_group = pygame.sprite.Group()
-Bullet_group = pygame.sprite.Group()
+Bullet_group = Bullet.sprite_groups()
 Missile_group = Missile.sprite_groups()
 Nuclear_group = Nuclear.sprite_groups()
 Explosion_group = Explosion.sprite_groups()
@@ -180,16 +167,15 @@ start_time_big_asteroid = time.time()
 bigasteroid = BigAsteroid(10)
 BigAsteroid_group.add(bigasteroid)
 
-#game functions
-def generate_asteroid():
+#generate_asteroid(all_sprite)
+
+"""def generate_asteroid():
     asteroid = Asteroid()
     asteroid_group.add(asteroid)
-    all_sprite.add(asteroid)    
+    all_sprite.add(asteroid) """ 
 
-
-for i in range(9):        
-    generate_asteroid()
-
+for i in range(9):
+    GameFunction.generate_asteroid(asteroid_group,all_sprite)
 
 run = True
 while run:

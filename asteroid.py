@@ -30,6 +30,8 @@ class Asteroid(pygame.sprite.Sprite):
         self.rect.y += self.speed_y 
         self.rect.x +=  self.speed_x
         self.boundary()
+        
+
         #clock.tick(fps)
 
     def sprite_groups():
