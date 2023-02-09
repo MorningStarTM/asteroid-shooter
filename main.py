@@ -3,7 +3,7 @@ import random
 import math
 import time
 from fire import Nuclear, Missile, Bullet
-from asteroid import Asteroid
+from asteroid import Asteroid, BigAsteroid
 from animation import Explosion
 from game_funtion import GameFunction
 
@@ -92,53 +92,6 @@ class Spaceship(pygame.sprite.Sprite):
 
 
 
-#class for big asteroid
-class BigAsteroid(pygame.sprite.Sprite):
-    def __init__(self, health):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('./image/asteroid_4.png')
-        self.rect = self.image.get_rect()
-        self.rect.x = random.randrange(0, WIDTH  - self.rect.width)
-        self.rect.y = random.randrange(-150, -100)
-        self.speed_y = random.randrange(1,3)
-        #self.speed_x = random.randrange(-5,5)
-        self.health_at_begining = health
-        self.health_remaining = health
-        self.time_astroid = 0
-    
-    def update(self):
-        self.rect.y += self.speed_y 
-        #self.rect.x +=  self.speed_x
-
-        #draw the health bar to player
-        pygame.draw.rect(SCREEN, red, (self.rect.x, (self.rect.top - 15), self.rect.width, 15))
-        if self.health_remaining > 0:
-            pygame.draw.rect(SCREEN, green, (self.rect.x, (self.rect.top - 15), int(self.rect.width * (self.health_remaining / self.health_at_begining)), 15))
-
-        if pygame.sprite.spritecollide(self, Bullet_group, True):
-            self.health_remaining -= 0.5
-        elif pygame.sprite.spritecollide(self, Missile_group, True):
-            self.health_remaining -= 0.5
-        elif pygame.sprite.spritecollide(self, Nuclear_group, True):
-            self.health_remaining -= 10
-        
-        if self.health_remaining <= 0:
-            self.kill()
-            explosion = Explosion(self.rect.centerx, self.rect.centery, None)
-            Explosion_group.add(explosion)
-            bastroid = BigAsteroid(10)
-            BigAsteroid_group.add(bastroid)
-        
-        """elif self.rect.centery > 1200:
-            if self.time_astroid % 10 == 0:
-                bastroid = BigAsteroid(100)
-                BigAsteroid_group.add(bastroid)"""
-        def bAstro_health(self):
-            return self.health_remaining
-        
-        #clock.tick(fps)      
-
-
 
 
   
@@ -153,7 +106,7 @@ Explosion_group = Explosion.sprite_groups()
 
 all_sprite = pygame.sprite.Group()
 asteroid_group = Asteroid.sprite_groups()
-BigAsteroid_group = pygame.sprite.Group()
+BigAsteroid_group = BigAsteroid.sprite_group()
 
 
 #player
@@ -164,7 +117,7 @@ Spaceship_group.add(spaceship)
 start_time_big_asteroid = time.time()
 
 
-bigasteroid = BigAsteroid(10)
+bigasteroid = BigAsteroid(10, Explosion_group, SCREEN, BigAsteroid_group, Bullet_group, Missile_group, Nuclear_group)
 BigAsteroid_group.add(bigasteroid)
 
 #generate_asteroid(all_sprite)
