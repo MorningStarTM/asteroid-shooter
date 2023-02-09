@@ -127,7 +127,9 @@ class Nuclear(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.y -= 5
-        if self.rect.bottom < 200:
+        if self.rect.bottom < 0:
+            self.kill()
+        elif pygame.sprite.spritecollide(self, BigAsteroid_group, True):
             self.kill()
 
 
