@@ -2,7 +2,7 @@ import pygame
 import random
 import math
 import time
-from fire import Nuclear, Missile, Bullet
+from fire import Nuclear, Missile, Bullet, display_score
 from asteroid import Asteroid, BigAsteroid
 from animation import Explosion
 from game_funtion import GameFunction
@@ -30,6 +30,8 @@ bg = pygame.image.load('./image/bg.jpg')
 green = (0,255,0)
 red = (255,0,0)
 
+#score
+score = 0
 
 #class for spaceship
 class Spaceship(pygame.sprite.Sprite):
@@ -185,6 +187,10 @@ while run:
     if bullet_collision:
         explosion = Explosion(asteroid_group.)
         generate_asteroid()"""
+    
+
+    display_score()
+    
     pygame.display.update()
 
 pygame.display.quit()

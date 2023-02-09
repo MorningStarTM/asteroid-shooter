@@ -7,6 +7,11 @@ from game_funtion import GameFunction
 from asteroid import Asteroid
 
 
+score = 0
+
+def display_score():
+    print(score)
+
 class Nuclear(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
@@ -47,7 +52,7 @@ class Missile(pygame.sprite.Sprite):
 
 #class for Bullet
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, x, y, all_sprite, asteroid_groups, explosion_group, score=0):
+    def __init__(self, x, y, all_sprite, asteroid_groups, explosion_group):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("./image/bullet.png")
         self.rect = self.image.get_rect()
@@ -55,14 +60,13 @@ class Bullet(pygame.sprite.Sprite):
         self.all_sprite = all_sprite
         self.asteroid_groups = asteroid_groups
         self.explosion_group = explosion_group
-        self.score = score
 
     def update(self):
+        global score
         self.rect.y -= 5
         if pygame.sprite.spritecollide(self, self.asteroid_groups, True):
             self.kill()
-            self.score += 1
-            print(self.score)
+            score += 1
             GameFunction.generate_asteroid(self.asteroid_groups, self.all_sprite)
             explosion = Explosion(self.rect.centerx, self.rect.centery, 2)
             self.explosion_group.add(explosion)
@@ -70,3 +74,5 @@ class Bullet(pygame.sprite.Sprite):
     def sprite_groups():
         Bullet_group = pygame.sprite.Group()
         return Bullet_group
+    
+    
