@@ -6,6 +6,7 @@ from fire import Nuclear, Missile, Bullet, display_score
 from asteroid import Asteroid, BigAsteroid
 from animation import Explosion
 from game_funtion import GameFunction
+from ammo import MissileAmmo
 
 pygame.init()
 
@@ -90,6 +91,7 @@ class Spaceship(pygame.sprite.Sprite):
         if self.health_remaining > 0:
             pygame.draw.rect(SCREEN, green, (self.rect.x, (self.rect.bottom + 10), int(self.rect.width * (self.health_remaining / self.health_at_begining)), 15))
 
+ 
 
         
 
@@ -100,11 +102,16 @@ Bullet_group = Bullet.sprite_groups()
 Missile_group = Missile.sprite_groups()
 Nuclear_group = Nuclear.sprite_groups()
 Explosion_group = Explosion.sprite_groups()
+missileAmmo_group = MissileAmmo.sprite_groups()
+
 
 all_sprite = pygame.sprite.Group()
 asteroid_group = Asteroid.sprite_groups()
 BigAsteroid_group = BigAsteroid.sprite_group()
 
+
+missileAmmo = MissileAmmo()
+missileAmmo_group.add(missileAmmo)
 
 #player
 spaceship = Spaceship(int(WIDTH/2), int(HEIGHT - 100), 5)
@@ -157,6 +164,13 @@ while run:
         
     #draw the explosion
     Explosion_group.draw(SCREEN)
+
+    #draw Ammo
+    missileAmmo_group.draw(SCREEN)
+
+
+    #Ammo movement
+    missileAmmo_group.update()
 
     #player movement
     spaceship.update()
