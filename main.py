@@ -2,9 +2,7 @@ import pygame
 import random
 import math
 import time
-from fire import Nuclear, Missile, Bullet
-from animation import Explosion
-from game_function import generate_asteroid
+from fire import Nuclear, Missile
 
 pygame.init()
 
@@ -88,6 +86,33 @@ class Spaceship(pygame.sprite.Sprite):
 
         
 
+# Class for the asteroids
+class Asteroid(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('./image/asteroid_' + str(random.randrange(1,3)) + '.png')
+        self.rect = self.image.get_rect()
+        self.rect.x = random.randrange(0, WIDTH  - self.rect.width)
+        self.rect.y = random.randrange(-150, -100)
+        self.speed_y = random.randrange(2,8)
+        self.speed_x = random.randrange(-5,5)
+    
+    def spawn_new_asteroid(self):
+        self.rect.x = random.randrange(0, WIDTH  - self.rect.width)
+        self.rect.y = random.randrange(-150, -100)
+        self.speed_y = random.randrange(2,8)
+        self.speed_x = random.randrange(-5,5)
+
+    def boundary(self):
+        if self.rect.left > WIDTH + 16 or self.rect.right < -16 or self.rect.top > WIDTH + 16:
+            self.spawn_new_asteroid()
+
+    def update(self):
+        self.rect.y += self.speed_y 
+        self.rect.x +=  self.speed_x
+        self.boundary()
+        #clock.tick(fps)
+
 
 #class for big asteroid
 class BigAsteroid(pygame.sprite.Sprite):
@@ -136,6 +161,64 @@ class BigAsteroid(pygame.sprite.Sprite):
         #clock.tick(fps)      
 
 
+#class for Bullet
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("./image/bullet.png")
+        self.rect = self.image.get_rect()
+        self.rect.center = [x, y]
+
+    def update(self):
+        self.rect.y -= 5
+        if pygame.sprite.spritecollide(self, asteroid_group, True):
+            self.kill()
+            generate_asteroid()
+            explosion = Explosion(self.rect.centerx, self.rect.centery, 2)
+            Explosion_group.add(explosion)
+
+
+#class for explosion
+class Explosion(pygame.sprite.Sprite):
+    def __init__(self, x, y, size):
+        pygame.sprite.Sprite.__init__(self)
+        self.images = []
+        for eps in range(1,6):
+            #load explosion image
+            img = pygame.image.load(f'./image/exp{eps}.png')
+            #explosion size
+            if size == 1:
+                img = pygame.transform.scale(img, (20, 20))
+            elif size == 2:
+                img = pygame.transform.scale(img, (40, 40))
+            elif size == 3:
+                img = pygame.transform.scale(img, (160, 160))
+            elif size == None:
+                img = pygame.transform.scale(img, (400, 400))
+            #append the img into list
+            self.images.append(img)
+        self.index = 0
+        self.image = self.images[self.index]
+        self.rect = self.image.get_rect()
+        self.rect.center = [x,y]
+        self.counter = 0
+
+    
+    def update(self):
+        explosion_speed = 3
+        self.counter += 1
+
+        if self.counter >= explosion_speed and self.index < len(self.images) - 1:
+            self.counter = 0
+            self.index += 1
+            self.image = self.images[self.index]
+
+        if self.index >= len(self.images) - 1 and self.counter >= explosion_speed:
+            self.kill()
+        
+  
+
+
 #sprite group
 Spaceship_group = pygame.sprite.Group()
 Bullet_group = pygame.sprite.Group()
@@ -158,6 +241,13 @@ start_time_big_asteroid = time.time()
 
 bigasteroid = BigAsteroid(10)
 BigAsteroid_group.add(bigasteroid)
+
+#game functions
+def generate_asteroid():
+    asteroid = Asteroid()
+    asteroid_group.add(asteroid)
+    all_sprite.add(asteroid)    
+
 
 for i in range(9):        
     generate_asteroid()
