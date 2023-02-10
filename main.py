@@ -91,9 +91,6 @@ class Spaceship(pygame.sprite.Sprite):
         if self.health_remaining > 0:
             pygame.draw.rect(SCREEN, green, (self.rect.x, (self.rect.bottom + 10), int(self.rect.width * (self.health_remaining / self.health_at_begining)), 15))
 
- 
-
-        
 
 
 #sprite group
@@ -110,8 +107,6 @@ asteroid_group = Asteroid.sprite_groups()
 BigAsteroid_group = BigAsteroid.sprite_group()
 
 
-missileAmmo = MissileAmmo()
-missileAmmo_group.add(missileAmmo)
 
 #player
 spaceship = Spaceship(int(WIDTH/2), int(HEIGHT - 100), 5)
@@ -121,6 +116,7 @@ Spaceship_group.add(spaceship)
 start_time_big_asteroid = time.time()
 
 last_destroyed_time = time.time()
+last_catridge_time = time.time()
 
 #generate asteroid
 for i in range(9):
@@ -135,6 +131,7 @@ while run:
     
     current_time = time.time()
     time_since_last_destroyed = current_time - last_destroyed_time
+    time_since_last_catridge = current_time - last_catridge_time
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -202,10 +199,14 @@ while run:
     if bullet_collision:
         explosion = Explosion(asteroid_group.)
         generate_asteroid()"""
-    
-    if time_since_last_destroyed >= 10.00:
-        # Display the new asteroid on the screen
-        print(time_since_last_destroyed)
+    if int(time_since_last_catridge) % 2 == 0 and int(time_since_last_catridge) != 0:
+        missileAmmo = MissileAmmo()
+        missileAmmo_group.add(missileAmmo)
+        all_sprite.add(missileAmmo)
+        last_catridge_time = current_time
+
+    if int(time_since_last_destroyed) % 20 == 0 and int(time_since_last_destroyed) != 0:
+        #generate the big asteroid at particular time
         GameFunction.generate_bigAsteroid(BigAsteroid_group, all_sprite, Explosion_group, SCREEN, Bullet_group, Missile_group, Nuclear_group)
 
         # Update the last_destroyed_time with the current time
