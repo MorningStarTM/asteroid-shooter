@@ -6,7 +6,7 @@ from fire import Nuclear, Missile, Bullet, display_score
 from asteroid import Asteroid, BigAsteroid
 from animation import Explosion
 from game_funtion import GameFunction
-from ammo import MissileAmmo
+from ammo import MissileAmmo, NuclearAmmo
 
 pygame.init()
 
@@ -36,7 +36,7 @@ score = display_score()
 
 #class for spaceship
 class Spaceship(pygame.sprite.Sprite):
-    def __init__(self, x, y, health, Mammo=0, Nammo=0):
+    def __init__(self, x, y, health):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("./image/spaceship.png")
         self.rect = self.image.get_rect()
@@ -44,8 +44,8 @@ class Spaceship(pygame.sprite.Sprite):
         self.health_at_begining = health
         self.health_remaining = health
         self.last_shot = pygame.time.get_ticks()
-        self.Mammo = Mammo
-        self.Nammo = Nammo
+        self.Mammo = []
+        self.Nammo = []
 
     def update(self):
         #movement speed
@@ -75,14 +75,27 @@ class Spaceship(pygame.sprite.Sprite):
         
         #when ctrl pressed missile will be released
         if key[pygame.K_LCTRL] and time_now - self.last_shot > cooldown:
-            missile = Missile(self.rect.centerx, self.rect.top)
-            Missile_group.add(missile)
-            self.last_shot = time_now
+            if len(self.Mammo) != 0:
+                missile = Missile(self.rect.centerx, self.rect.top)
+                Missile_group.add(missile)
+                self.last_shot = time_now
+                self.Mammo.pop()
         
+        #when ctrl pressed missile will be released
         if key[pygame.K_q] and time_now - self.last_shot > cooldown:
-            nuclear = Nuclear(self.rect.centerx, self.rect.top)
-            Nuclear_group.add(nuclear)
-            self.last_shot = time_now
+            if len(self.Nammo) != 0:
+                nuclear = Nuclear(self.rect.centerx, self.rect.top)
+                Nuclear_group.add(nuclear)
+                self.last_shot = time_now
+                self.Nammo.pop()
+
+        #check collision of missile ammo
+        if pygame.sprite.spritecollide(self, missileAmmo_group, True):
+            self.Mammo.append(1)
+        
+        #check collsion of nuclear ammo
+        if pygame.sprite.spritecollide(self, nuclearAmmo_group, True):
+            self.Nammo.append(1)
 
 
 
@@ -100,6 +113,7 @@ Missile_group = Missile.sprite_groups()
 Nuclear_group = Nuclear.sprite_groups()
 Explosion_group = Explosion.sprite_groups()
 missileAmmo_group = MissileAmmo.sprite_groups()
+nuclearAmmo_group = NuclearAmmo.sprite_groups()
 
 
 all_sprite = pygame.sprite.Group()
@@ -117,6 +131,7 @@ start_time_big_asteroid = time.time()
 
 last_destroyed_time = time.time()
 last_catridge_time = time.time()
+last_nuclear_catridge_time = time.time()
 
 #generate asteroid
 for i in range(9):
@@ -132,6 +147,7 @@ while run:
     current_time = time.time()
     time_since_last_destroyed = current_time - last_destroyed_time
     time_since_last_catridge = current_time - last_catridge_time
+    time_last_nuclear_catridge = current_time - last_nuclear_catridge_time
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -164,10 +180,12 @@ while run:
 
     #draw Ammo
     missileAmmo_group.draw(SCREEN)
+    nuclearAmmo_group.draw(SCREEN)
 
 
     #Ammo movement
     missileAmmo_group.update()
+    nuclearAmmo_group.update()
 
     #player movement
     spaceship.update()
@@ -199,11 +217,21 @@ while run:
     if bullet_collision:
         explosion = Explosion(asteroid_group.)
         generate_asteroid()"""
+    
+    #generate missile ammo
     if int(time_since_last_catridge) % 18 == 0 and int(time_since_last_catridge) != 0:
         missileAmmo = MissileAmmo()
         missileAmmo_group.add(missileAmmo)
         all_sprite.add(missileAmmo)
         last_catridge_time = current_time
+
+    #generate nuclear ammo
+    if (int(time_last_nuclear_catridge)) % 30 == 0 and int(time_last_nuclear_catridge) != 0:
+        nuclearAmmo = NuclearAmmo()
+        nuclearAmmo_group.add(nuclearAmmo)
+        all_sprite.add(nuclearAmmo)
+        last_nuclear_catridge_time = current_time
+    
 
     if int(time_since_last_destroyed) % 20 == 0 and int(time_since_last_destroyed) != 0:
         #generate the big asteroid at particular time
