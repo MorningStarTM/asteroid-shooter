@@ -13,16 +13,24 @@ def display_score():
     return score
 
 class Nuclear(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, asteroid_group, explosion_group):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("./image/nuclear.png")
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
+        self.asteroid_group = asteroid_group
+        self.explosion_group = explosion_group
 
     def update(self):
         self.rect.y -= 5
         if self.rect.bottom < 0:
             self.kill()
+        
+        #check collsion between nuclear and asteroid
+        if pygame.sprite.spritecollide(self, self.asteroid_group, True):
+            self.kill()
+            explosion = Explosion(self.rect.centerx, self.rect.centery, 10)
+            self.explosion_group.add(explosion)
 
     def sprite_groups():
         Nuclear_group = pygame.sprite.Group()
@@ -33,16 +41,23 @@ class Nuclear(pygame.sprite.Sprite):
 
 #class for missile
 class Missile(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, asteroid_group, explosion_group):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("./image/missile.png")
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
+        self.asteroid_group = asteroid_group
+        self.explosion_group = explosion_group
 
     def update(self):
         self.rect.y -= 5
         if self.rect.bottom < 0:
             self.kill()  
+        #check collsion between missile and asteroid
+        if pygame.sprite.spritecollide(self, self.asteroid_group, True):
+            self.kill()
+            explosion = Explosion(self.rect.centerx, self.rect.centery, 4)
+            self.explosion_group.add(explosion)
 
     def sprite_groups():
         Missile_group = pygame.sprite.Group()

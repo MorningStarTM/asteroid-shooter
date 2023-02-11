@@ -35,12 +35,15 @@ class NuclearAmmo(pygame.sprite.Sprite):
         self.rect.y = random.randrange(-150, -100)
         self.speed_y = random.randrange(5,10)
         self.speed_x = random.randrange(-5,5)
+        
     
 
     def update(self):
-        self.rect.y += self.speed_y    
+        self.rect.y += self.speed_y  
+        
 
     def sprite_groups():
         nuclear_ammo_group = pygame.sprite.Group()
         return nuclear_ammo_group
+    
     

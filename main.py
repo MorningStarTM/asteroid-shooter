@@ -76,7 +76,7 @@ class Spaceship(pygame.sprite.Sprite):
         #when ctrl pressed missile will be released
         if key[pygame.K_LCTRL] and time_now - self.last_shot > cooldown:
             if len(self.Mammo) != 0:
-                missile = Missile(self.rect.centerx, self.rect.top)
+                missile = Missile(self.rect.centerx, self.rect.top, asteroid_group, Explosion_group)
                 Missile_group.add(missile)
                 self.last_shot = time_now
                 self.Mammo.pop()
@@ -84,7 +84,7 @@ class Spaceship(pygame.sprite.Sprite):
         #when ctrl pressed missile will be released
         if key[pygame.K_q] and time_now - self.last_shot > cooldown:
             if len(self.Nammo) != 0:
-                nuclear = Nuclear(self.rect.centerx, self.rect.top)
+                nuclear = Nuclear(self.rect.centerx, self.rect.top, asteroid_group, Explosion_group)
                 Nuclear_group.add(nuclear)
                 self.last_shot = time_now
                 self.Nammo.pop()
@@ -219,14 +219,14 @@ while run:
         generate_asteroid()"""
     
     #generate missile ammo
-    if int(time_since_last_catridge) % 18 == 0 and int(time_since_last_catridge) != 0:
+    if int(time_since_last_catridge) % 15 == 0 and int(time_since_last_catridge) != 0:
         missileAmmo = MissileAmmo()
         missileAmmo_group.add(missileAmmo)
         all_sprite.add(missileAmmo)
         last_catridge_time = current_time
 
     #generate nuclear ammo
-    if (int(time_last_nuclear_catridge)) % 30 == 0 and int(time_last_nuclear_catridge) != 0:
+    if (int(time_last_nuclear_catridge)) % 2 == 0 and int(time_last_nuclear_catridge) != 0:
         nuclearAmmo = NuclearAmmo()
         nuclearAmmo_group.add(nuclearAmmo)
         all_sprite.add(nuclearAmmo)
