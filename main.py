@@ -199,7 +199,7 @@ while run:
     if bullet_collision:
         explosion = Explosion(asteroid_group.)
         generate_asteroid()"""
-    if int(time_since_last_catridge) % 2 == 0 and int(time_since_last_catridge) != 0:
+    if int(time_since_last_catridge) % 18 == 0 and int(time_since_last_catridge) != 0:
         missileAmmo = MissileAmmo()
         missileAmmo_group.add(missileAmmo)
         all_sprite.add(missileAmmo)
