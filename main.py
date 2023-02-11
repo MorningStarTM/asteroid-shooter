@@ -81,7 +81,7 @@ class Spaceship(pygame.sprite.Sprite):
         #when ctrl pressed missile will be released
         if key[pygame.K_LCTRL] and time_now - self.last_shot > cooldown:
             if len(self.Mammo) != 0:
-                missile = Missile(self.rect.centerx, self.rect.top, asteroid_group, Explosion_group)
+                missile = Missile(self.rect.centerx, self.rect.top, asteroid_group, BigAsteroid_group,Explosion_group)
                 Missile_group.add(missile)
                 self.last_shot = time_now
                 self.Mammo.pop()
@@ -89,7 +89,7 @@ class Spaceship(pygame.sprite.Sprite):
         #when ctrl pressed missile will be released
         if key[pygame.K_q] and time_now - self.last_shot > cooldown:
             if len(self.Nammo) != 0:
-                nuclear = Nuclear(self.rect.centerx, self.rect.top, asteroid_group, Explosion_group)
+                nuclear = Nuclear(self.rect.centerx, self.rect.top, asteroid_group, BigAsteroid_group, Explosion_group)
                 Nuclear_group.add(nuclear)
                 self.last_shot = time_now
                 self.Nammo.pop()
@@ -254,7 +254,7 @@ while run:
         last_nuclear_catridge_time = current_time
     
 
-    if int(time_since_last_destroyed) % 20 == 0 and int(time_since_last_destroyed) != 0:
+    if int(time_since_last_destroyed) % 5 == 0 and int(time_since_last_destroyed) != 0:
         #generate the big asteroid at particular time
         GameFunction.generate_bigAsteroid(BigAsteroid_group, all_sprite, Explosion_group, SCREEN, Bullet_group, Missile_group, Nuclear_group)
 

@@ -10,6 +10,11 @@ HEIGHT = 1000
 green = (0,255,0)
 red = (255,0,0)
 
+#score
+score = 0
+
+def pass_score():
+    return score
 
 # Class for the asteroids
 class Asteroid(pygame.sprite.Sprite):
@@ -86,10 +91,11 @@ class BigAsteroid(pygame.sprite.Sprite):
         
         if self.health_remaining <= 0:
             self.kill()
-            explosion = Explosion(self.rect.centerx, self.rect.centery, None)
-            self.Explosion_group.add(explosion)
-            #bastroid = BigAsteroid(10, self.Explosion_group, self.SCREEN, self.BigAsteroid_group, self.Bullet_group, self.Missile_group, self.Nuclear_group)
-            #self.BigAsteroid_group.add(bastroid)
+
+            #explosion = Explosion(self.rect.centerx, self.rect.centery, None)
+            #self.Explosion_group.add(explosion)
+            
+            
         
         """elif self.rect.centery > 1200:
             if self.time_astroid % 10 == 0:

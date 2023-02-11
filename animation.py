@@ -18,7 +18,7 @@ class Explosion(pygame.sprite.Sprite):
             elif size == 3:
                 img = pygame.transform.scale(img, (160, 160))
             elif size == None:
-                img = pygame.transform.scale(img, (400, 400))
+                img = pygame.transform.scale(img, (500, 500))
             #append the img into list
             self.images.append(img)
         self.index = 0
