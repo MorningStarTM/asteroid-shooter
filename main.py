@@ -247,14 +247,14 @@ while run:
         last_catridge_time = current_time
 
     #generate nuclear ammo
-    if (int(time_last_nuclear_catridge)) % 2 == 0 and int(time_last_nuclear_catridge) != 0:
+    if (int(time_last_nuclear_catridge)) % 25 == 0 and int(time_last_nuclear_catridge) != 0:
         nuclearAmmo = NuclearAmmo()
         nuclearAmmo_group.add(nuclearAmmo)
         all_sprite.add(nuclearAmmo)
         last_nuclear_catridge_time = current_time
     
 
-    if int(time_since_last_destroyed) % 5 == 0 and int(time_since_last_destroyed) != 0:
+    if int(time_since_last_destroyed) % 20 == 0 and int(time_since_last_destroyed) != 0:
         #generate the big asteroid at particular time
         GameFunction.generate_bigAsteroid(BigAsteroid_group, all_sprite, Explosion_group, SCREEN, Bullet_group, Missile_group, Nuclear_group)
 
