@@ -78,7 +78,7 @@ class BigAsteroid(pygame.sprite.Sprite):
             pygame.draw.rect(self.SCREEN, green, (self.rect.x, (self.rect.top - 15), int(self.rect.width * (self.health_remaining / self.health_at_begining)), 15))
 
         if pygame.sprite.spritecollide(self, self.Bullet_group, True):
-            self.health_remaining -= 0.5
+            self.health_remaining -= 0.1
         elif pygame.sprite.spritecollide(self, self.Missile_group, True):
             self.health_remaining -= 0.5
         elif pygame.sprite.spritecollide(self, self.Nuclear_group, True):

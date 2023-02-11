@@ -26,7 +26,9 @@ clock = pygame.time.Clock()
 #background image
 bg = pygame.image.load('./image/bg.jpg')
 
-
+#font
+my_font = pygame.font.Font("./font/ostrich-regular.ttf", 90)
+ammo_font = pygame.font.Font("./font/ostrich-regular.ttf", 50)
 #green color
 green = (0,255,0)
 red = (255,0,0)
@@ -46,6 +48,9 @@ class Spaceship(pygame.sprite.Sprite):
         self.last_shot = pygame.time.get_ticks()
         self.Mammo = []
         self.Nammo = []
+    
+    def ammo(self):
+        return len(self.Mammo), len(self.Nammo)
 
     def update(self):
         #movement speed
@@ -136,6 +141,22 @@ last_nuclear_catridge_time = time.time()
 #generate asteroid
 for i in range(9):
     GameFunction.generate_asteroid(asteroid_group,all_sprite)
+
+
+#function for display the score
+def display_score_on_screen(score):
+    text = my_font.render(f'Score: {str(score)}', True, (211,211,211))
+    SCREEN.blit(text, [10, 10])
+
+def display_ammo():
+    missile_count, nuclear_count = Spaceship.ammo(spaceship)
+    missile_info = ammo_font.render(f'Missile-{str(missile_count)}', True, 'gray')
+    nuclear_info = ammo_font.render(f'Nuclear-{str(nuclear_count)}', True, 'gray')
+    SCREEN.blit(missile_info, [10, 950])
+    SCREEN.blit(nuclear_info, [10, 900])
+
+#score
+score = 0
 
 run = True
 while run:
@@ -240,6 +261,11 @@ while run:
         # Update the last_destroyed_time with the current time
         last_destroyed_time = current_time
     
+
+    score = display_score()
+    display_score_on_screen(score)
+
+    display_ammo()
     pygame.display.update()
 
 pygame.display.quit()
